@@ -1,0 +1,43 @@
+---
+- hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+  - name: Waiting for server
+    wait_for_connection:
+      delay: 10
+      timeout: 90
+      
+  - name: Update apt
+    remote_user: ubuntu
+    apt:
+      update_cache: yes
+
+  - name: Installing docker
+    remote_user: ubuntu
+    apt:
+      name: ['docker.io', 'docker-compose']
+      state: present
+    become: true
+
+  - name: Adding ubuntu user in docker group
+    shell: "sudo usermod -a -G docker $USER"
+
+  - name: Enable Docker on Startup
+    shell: sudo systemctl enable docker
+    become: yes
+
+  - name: Download nginx
+    copy: src=nginx/ dest=/home/ubuntu/nginx
+
+  - name: Run docker build nginx
+    shell: "docker build -t nginx:1.0 nginx/"
+
+  - name: Run docker run nginx
+    shell: "docker run --name nginx -d -p 80:80 -p 443:443 nginx:1.0"
+
+  - name: Download Image Terraform-ansible
+    shell: "docker pull thecalifornia16/desafio-node:latest"
+
+  - name: Running Application Container
+    shell: "docker run --name terraform-ansible --restart=always -d -p 3000:3000 thecalifornia16/desafio-node:latest"

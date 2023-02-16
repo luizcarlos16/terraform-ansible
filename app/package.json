@@ -1,0 +1,14 @@
+{
+    "name": "terraform-ansible",
+    "version": "1.0.0",
+    "description": "terraform-ansible",
+    "main": "index.js",
+    "repository": "",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "express": "^4.18.1"
+    }
+}
+  

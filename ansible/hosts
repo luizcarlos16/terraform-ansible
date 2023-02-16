@@ -1,0 +1,5 @@
+[webserver]
+0.0.0.0	   #Here you put the 'publicIp' that came in the terraform output or your EC2 that was created in AWS
+
+[all:vars]
+ansible_user = ubuntu
